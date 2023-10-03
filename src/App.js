@@ -11,7 +11,8 @@ function App() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        background:"#191b1f"
+        background:"#191b1f",
+        direction:"rtl"
       }}
     >
       <TodoList />
