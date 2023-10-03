@@ -9,6 +9,9 @@ import Divider from "@mui/material/Divider";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
+// Components
+import Todo from "./Todo";
+
 export default function TodoList() {
   return (
     <Container maxWidth="sm">
@@ -23,17 +26,18 @@ export default function TodoList() {
             // value={alignment}
             exclusive
             // onChange={handleChange}
-            aria-label="Platform"
+            aria-label="text alignment"
           >
-            <ToggleButton value="web">غير المنجز</ToggleButton>
-            <ToggleButton value="android">المنجز</ToggleButton>
-            <ToggleButton value="ios">الكل</ToggleButton>
+            <ToggleButton value="">غير المنجز</ToggleButton>
+            <ToggleButton value="">المنجز</ToggleButton>
+            <ToggleButton value="">الكل</ToggleButton>
           </ToggleButtonGroup>
           {/* ===Filter Button=== */}
+
+          {/* All Todo */}
+          <Todo />
+          {/* ===All Todo */}
         </CardContent>
-        <CardActions>
-          <Button size="small">Learn More</Button>
-        </CardActions>
       </Card>
     </Container>
   );
