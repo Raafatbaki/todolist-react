@@ -17,7 +17,7 @@ export default function TodoList() {
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275 }}>
         <CardContent>
-          <Typography variant="h2">مهامي</Typography>
+          <Typography variant="h2" style={{ fontWeight: "bold" }}>مهامي</Typography>
           <Divider />
 
           {/* {Filter Button} */}

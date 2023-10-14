@@ -4,14 +4,17 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+//Icon
 import CheckIcon from "@mui/icons-material/Check";
-import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
+import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 export default function Todo() {
   return (
     <>
       <Card
+      className="todoCard"
         sx={{
           minWidth: 275,
           background: "#283593",
@@ -25,6 +28,9 @@ export default function Todo() {
               <Typography variant="h5" sx={{ textAlign: "right" }}>
                 المهمة الاولى
               </Typography>
+              <Typography variant="h6" sx={{ textAlign: "right" }}>
+                تفاصيل المهمة الاولى
+              </Typography>
             </Grid>
             {/* Action Button */}
             <Grid
@@ -34,6 +40,7 @@ export default function Todo() {
               alignItems="center"
             >
               <IconButton
+              className="iconButton"
                 aria-label="delete"
                 style={{
                   color: "#8bc34a",
@@ -44,24 +51,26 @@ export default function Todo() {
                 <CheckIcon />
               </IconButton>
               <IconButton
+              className="iconButton"
                 aria-label="delete"
                 style={{
-                  color: "#8bc34a",
+                  color: "#1769aa",
                   background: "white",
-                  border: "solid #8bc34a 3px",
+                  border: "solid #1769aa 3px",
                 }}
               >
-                <CheckIcon />
+                <ModeEditOutlinedIcon />
               </IconButton>
               <IconButton
+              className="iconButton"
                 aria-label="delete"
                 style={{
-                  color: "#8bc34a",
+                  color: "#b23c17",
                   background: "white",
-                  border: "solid #8bc34a 3px",
+                  border: "solid #b23c17 3px",
                 }}
               >
-                <CheckIcon />
+                <DeleteOutlineOutlinedIcon />
               </IconButton>
             </Grid>
             {/* ===Action Button=== */}
