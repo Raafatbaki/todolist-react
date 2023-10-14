@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
-export default function Todo() {
+export default function Todo({titel, details}) {
   return (
     <>
       <Card
@@ -26,10 +26,10 @@ export default function Todo() {
           <Grid container spacing={2} style={{ padding: "10px" }}>
             <Grid xs={8}>
               <Typography variant="h5" sx={{ textAlign: "right" }}>
-                المهمة الاولى
+                {titel}
               </Typography>
               <Typography variant="h6" sx={{ textAlign: "right" }}>
-                تفاصيل المهمة الاولى
+                {details}
               </Typography>
             </Grid>
             {/* Action Button */}
