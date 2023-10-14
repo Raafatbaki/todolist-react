@@ -7,14 +7,17 @@ import Grid from "@mui/material/Grid";
 //Icon
 import CheckIcon from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
-import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-export default function Todo({title, details}) {
+export default function Todo({ todo, handleCheck }) {
+  function handleCheckClick() {
+    handleCheck(todo.id);
+  }
   return (
     <>
       <Card
-      className="todoCard"
+        className="todoCard"
         sx={{
           minWidth: 275,
           background: "#283593",
@@ -26,10 +29,10 @@ export default function Todo({title, details}) {
           <Grid container spacing={2} style={{ padding: "10px" }}>
             <Grid xs={8}>
               <Typography variant="h5" sx={{ textAlign: "right" }}>
-                {title}
+                {todo.title}
               </Typography>
               <Typography variant="h6" sx={{ textAlign: "right" }}>
-                {details}
+                {todo.details}
               </Typography>
             </Grid>
             {/* Action Button */}
@@ -39,19 +42,24 @@ export default function Todo({title, details}) {
               justifyContent="space-around"
               alignItems="center"
             >
+              {/* CHECK ICON BUTTON */}
               <IconButton
-              className="iconButton"
+                onClick={() => {
+                  handleCheckClick();
+                }}
+                className="iconButton"
                 aria-label="delete"
                 style={{
-                  color: "#8bc34a",
-                  background: "white",
+                  color: todo.isCompleted ? "white" : "#8bc34a",
+                  background: todo.isCompleted ? "#8bc34a" : "white",
                   border: "solid #8bc34a 3px",
                 }}
               >
                 <CheckIcon />
               </IconButton>
+              {/*== CHECK ICON BUTTON ==*/}
               <IconButton
-              className="iconButton"
+                className="iconButton"
                 aria-label="delete"
                 style={{
                   color: "#1769aa",
@@ -61,8 +69,9 @@ export default function Todo({title, details}) {
               >
                 <ModeEditOutlinedIcon />
               </IconButton>
+
               <IconButton
-              className="iconButton"
+                className="iconButton"
                 aria-label="delete"
                 style={{
                   color: "#b23c17",

@@ -23,19 +23,19 @@ const itodos = [
     id: uuidv4(),
     title: "قراءةكتاب",
     details: "سسسسسسسسسسششب",
-    isComplated: false,
+    isCompleted: false,
   },
   {
     id: uuidv4(),
     title: "قراءةكتاب",
     details: "سسسسسسسسسسشffddشب",
-    isComplated: false,
+    isCompleted: false,
   },
   {
     id: uuidv4(),
     title: "قراءةكتاب",
     details: "سسسسسسسسسسششب",
-    isComplated: false,
+    isCompleted: false,
   },
 ];
 
@@ -43,8 +43,17 @@ export default function TodoList() {
   const [todos, setTodos] = useState(itodos);
   const [titleInput, setTitleInput] = useState("");
 
+  function handleCheckClick(todoId) {
+    const updatedTodos = todos.map((t) => {
+      if (t.id == todoId) {
+        t.isCompleted = !t.isCompleted;
+      }
+      return t;
+    });
+    setTodos(updatedTodos);
+  }
   const todoJsx = todos.map((t) => {
-    return <Todo key={t.id} title={t.title} details={t.details} />;
+    return <Todo key={t.id} todo={t} handleCheck={handleCheckClick}/>;
   });
 
   function handleAddClick() {
