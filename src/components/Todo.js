@@ -1,10 +1,9 @@
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { useContext, useState} from "react";
+import { useContext, useState } from "react";
 import { TodosContext } from "../contexts/todosContext";
 import TextField from "@mui/material/TextField";
 
@@ -14,14 +13,13 @@ import IconButton from "@mui/material/IconButton";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 //Dialog
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 export default function Todo({ todo, handleCheck }) {
-
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
   const [updatedTodo, setUpdatedTodo] = useState({
@@ -30,7 +28,7 @@ export default function Todo({ todo, handleCheck }) {
   });
 
   const { todos, setTodos } = useContext(TodosContext);
-  
+
   // EVENT HANDLERS
   function handleCheckClick() {
     const updatedTodos = todos.map((t) => {
@@ -84,14 +82,14 @@ export default function Todo({ todo, handleCheck }) {
     <>
       {/* DELETE DIALOG */}
       <Dialog
-        style={{direction:"rtl"}}
+        style={{ direction: "rtl" }}
         onClose={handleDeleteDialogClose}
         open={showDeleteDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-        هل انت متاكد من رغبتك في الحذف
+          هل انت متاكد من رغبتك في الحذف
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -100,7 +98,7 @@ export default function Todo({ todo, handleCheck }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteDialogClose}>اغلاق</Button>
-          <Button  autoFocus onClick={handleDeleteConfirm}>
+          <Button autoFocus onClick={handleDeleteConfirm}>
             نعم قم بالحذف
           </Button>
         </DialogActions>
@@ -164,7 +162,13 @@ export default function Todo({ todo, handleCheck }) {
         <CardContent>
           <Grid container spacing={2} style={{ padding: "10px" }}>
             <Grid xs={8}>
-              <Typography variant="h5" sx={{ textAlign: "right" }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  textAlign: "right",
+                  textDecoration: todo.isCompleted ? "line-through" : "none",
+                }}
+              >
                 {todo.title}
               </Typography>
               <Typography variant="h6" sx={{ textAlign: "right" }}>
@@ -178,7 +182,6 @@ export default function Todo({ todo, handleCheck }) {
               justifyContent="space-around"
               alignItems="center"
             >
-
               {/* CHECK ICON BUTTON */}
               <IconButton
                 onClick={() => {
@@ -210,7 +213,7 @@ export default function Todo({ todo, handleCheck }) {
                 <ModeEditOutlinedIcon />
               </IconButton>
               {/*== CHECK ICON BUTTON ==*/}
-              
+
               {/* DELETE BUTTON */}
               <IconButton
                 className="iconButton"
