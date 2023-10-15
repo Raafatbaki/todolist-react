@@ -40,6 +40,7 @@ export default function Todo({ todo, handleCheck }) {
       return t;
     });
     setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
   }
 
   function handleDeleteClick() {
@@ -54,8 +55,8 @@ export default function Todo({ todo, handleCheck }) {
     const updatedTodos = todos.filter((t) => {
       return t.id != todo.id;
     });
-
     setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
   }
 
   function handleUpdateClick() {
@@ -74,9 +75,9 @@ export default function Todo({ todo, handleCheck }) {
         return t;
       }
     });
-
     setTodos(updatedTodos);
     setShowUpdateDialog(false);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
   }
   // ====== EVENT HANDLERS ======
   return (
