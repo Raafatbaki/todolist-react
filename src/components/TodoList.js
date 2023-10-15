@@ -10,50 +10,25 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
+import { v4 as uuidv4 } from "uuid";
 
 // Components
 import Todo from "./Todo";
 
 // OTHERS
-import { v4 as uuidv4 } from "uuid";
+import { TodosContext } from "../contexts/todosContext";
+import { useContext } from "react";
 import { useState } from "react";
 
-const itodos = [
-  {
-    id: uuidv4(),
-    title: "قراءةكتاب",
-    details: "سسسسسسسسسسششب",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "قراءةكتاب",
-    details: "سسسسسسسسسسشffddشب",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "قراءةكتاب",
-    details: "سسسسسسسسسسششب",
-    isCompleted: false,
-  },
-];
+
 
 export default function TodoList() {
-  const [todos, setTodos] = useState(itodos);
+  
+  const { todos, setTodos } = useContext(TodosContext);
   const [titleInput, setTitleInput] = useState("");
 
-  function handleCheckClick(todoId) {
-    const updatedTodos = todos.map((t) => {
-      if (t.id == todoId) {
-        t.isCompleted = !t.isCompleted;
-      }
-      return t;
-    });
-    setTodos(updatedTodos);
-  }
   const todoJsx = todos.map((t) => {
-    return <Todo key={t.id} todo={t} handleCheck={handleCheckClick}/>;
+    return <Todo key={t.id} todo={t}/>;
   });
 
   function handleAddClick() {
@@ -138,7 +113,7 @@ export default function TodoList() {
   );
 }
 
-{
+
   /* <Grid container spacing={0} style={{ marginTop: "20px" }}>
 <Grid
   xs={8}
@@ -163,4 +138,4 @@ export default function TodoList() {
   sssssss
 </Grid>
 </Grid> */
-}
+

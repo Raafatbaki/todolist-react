@@ -4,6 +4,8 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import { useContext } from "react";
+import { TodosContext } from "../contexts/todosContext";
 //Icon
 import CheckIcon from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
@@ -11,8 +13,16 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 export default function Todo({ todo, handleCheck }) {
+  const { todos, setTodos } = useContext(TodosContext);
+  
   function handleCheckClick() {
-    handleCheck(todo.id);
+    const updatedTodos = todos.map((t) => {
+      if (t.id == todo.id) {
+        t.isCompleted = !t.isCompleted;
+      }
+      return t;
+    });
+    setTodos(updatedTodos);
   }
   return (
     <>
