@@ -6,6 +6,8 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { useContext, useState} from "react";
 import { TodosContext } from "../contexts/todosContext";
+import TextField from "@mui/material/TextField";
+
 //Icon
 import CheckIcon from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
@@ -21,6 +23,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 export default function Todo({ todo, handleCheck }) {
 
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+  const [updatedTodo, setUpdatedTodo] = useState({
+    title: todo.title,
+    details: todo.details,
+  });
+
   const { todos, setTodos } = useContext(TodosContext);
   
   // EVENT HANDLERS
@@ -49,6 +57,27 @@ export default function Todo({ todo, handleCheck }) {
 
     setTodos(updatedTodos);
   }
+
+  function handleUpdateClick() {
+    setShowUpdateDialog(true);
+  }
+
+  function handleUpdateClose() {
+    setShowUpdateDialog(false);
+  }
+
+  function handleUpdateConfirm() {
+    const updatedTodos = todos.map((t) => {
+      if (t.id == todo.id) {
+        return { ...t, title: updatedTodo.title, details: updatedTodo.details };
+      } else {
+        return t;
+      }
+    });
+
+    setTodos(updatedTodos);
+    setShowUpdateDialog(false);
+  }
   // ====== EVENT HANDLERS ======
   return (
     <>
@@ -76,6 +105,51 @@ export default function Todo({ todo, handleCheck }) {
         </DialogActions>
       </Dialog>
       {/* === DELETE DIALOG === */}
+
+      {/* UPDATE DIALOG */}
+      <Dialog
+        style={{ direction: "rtl" }}
+        onClose={handleUpdateClose}
+        open={showUpdateDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">تعديل مهمة</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="عنوان المهمة"
+            fullWidth
+            variant="standard"
+            value={updatedTodo.title}
+            onChange={(e) => {
+              setUpdatedTodo({ ...updatedTodo, title: e.target.value });
+            }}
+          />
+
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="التفاصيل"
+            fullWidth
+            variant="standard"
+            value={updatedTodo.details}
+            onChange={(e) => {
+              setUpdatedTodo({ ...updatedTodo, details: e.target.value });
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleUpdateClose}>إغلاق</Button>
+          <Button autoFocus onClick={handleUpdateConfirm}>
+            تأكيد
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* === UPDATE DIALOG */}
 
       <Card
         className="todoCard"
@@ -121,6 +195,7 @@ export default function Todo({ todo, handleCheck }) {
               </IconButton>
               {/*== CHECK ICON BUTTON ==*/}
 
+              {/* CHECK ICON BUTTON */}
               <IconButton
                 className="iconButton"
                 aria-label="delete"
@@ -129,9 +204,11 @@ export default function Todo({ todo, handleCheck }) {
                   background: "white",
                   border: "solid #1769aa 3px",
                 }}
+                onClick={handleUpdateClick}
               >
                 <ModeEditOutlinedIcon />
               </IconButton>
+              {/*== CHECK ICON BUTTON ==*/}
               
               {/* DELETE BUTTON */}
               <IconButton
