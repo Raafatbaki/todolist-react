@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { useContext, useState } from "react";
 import { TodosContext } from "../contexts/todosContext";
-import { TosatContext } from "../contexts/Toastcontext";
+import { useToast } from "../contexts/Toastcontext";
 import TextField from "@mui/material/TextField";
 
 //Icon
@@ -16,7 +16,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 
 export default function Todo({ todo, showDelete, showUpdate }) {
   const { todos, setTodos } = useContext(TodosContext);
-  const { showHideToast } = useContext(TosatContext);
+  const { showHideToast } = useToast();
 
   // EVENT HANDLERS
   function handleCheckClick() {

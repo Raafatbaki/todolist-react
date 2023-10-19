@@ -16,7 +16,7 @@ import Todo from "./Todo";
 
 // OTHERS
 import { TodosContext } from "../contexts/todosContext";
-import { TosatContext } from "../contexts/Toastcontext";
+import { useToast } from "../contexts/Toastcontext";
 import { useContext, useState, useEffect, useMemo } from "react";
 
 //Dialog
@@ -29,7 +29,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 export default function TodoList() {
   // console.log("re render")
   const { todos, setTodos } = useContext(TodosContext);
-  const { showHideToast } = useContext(TosatContext);
+  const { showHideToast } = useToast();
 
   const [dialogTodo, setDailogTodo] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);

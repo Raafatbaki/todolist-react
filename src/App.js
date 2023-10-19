@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { TodosContext } from "./contexts/todosContext";
 import MySnackBar from "./components/MySnackBar";
-import { TosatContext } from "./contexts/Toastcontext";
+import { ToastPrevoider } from "./contexts/Toastcontext";
 
 const itodos = [
   {
@@ -42,19 +42,10 @@ const theme = createTheme({
 
 function App() {
   const [todos, setTodos] = useState(itodos);
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("");
 
-  function showHideToast(message) {
-    setOpen(true);
-    setMessage(message);
-    setTimeout(() => {
-      setOpen(false);
-    }, 2000);
-  }
   return (
     <ThemeProvider theme={theme}>
-      <TosatContext.Provider value={{ showHideToast }}>
+      <ToastPrevoider>
         <div
           className="App"
           style={{
@@ -66,12 +57,11 @@ function App() {
             direction: "ltr",
           }}
         >
-          <MySnackBar open={open} message={message} />
           <TodosContext.Provider value={{ todos, setTodos }}>
             <TodoList />
           </TodosContext.Provider>
         </div>
-      </TosatContext.Provider>
+      </ToastPrevoider>
     </ThemeProvider>
   );
 }
