@@ -16,28 +16,41 @@ import Todo from "./Todo";
 
 // OTHERS
 import { TodosContext } from "../contexts/todosContext";
+import { TosatContext } from "../contexts/Toastcontext";
 import { useContext, useState, useEffect, useMemo } from "react";
 
+//Dialog
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 export default function TodoList() {
-  console.log("re render")
+  // console.log("re render")
   const { todos, setTodos } = useContext(TodosContext);
+  const { showHideToast } = useContext(TosatContext);
+
+  const [dialogTodo, setDailogTodo] = useState(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
   const [titleInput, setTitleInput] = useState("");
   const [displayedTodosType, setDisplayedTodosType] = useState("all");
 
   // filteration arrays
   const completedTodos = useMemo(() => {
-    console.log("complated")
+    // console.log("complated")
     return todos.filter((t) => {
       return t.isCompleted;
     });
-  }, [todos])
-  
+  }, [todos]);
+
   const notCompletedTodos = useMemo(() => {
-    console.log("not complated")
+    // console.log("not complated")
     return todos.filter((t) => {
       return !t.isCompleted;
     });
-  }, [todos])   
+  }, [todos]);
 
   let todosToBeRendered = todos;
 
@@ -48,10 +61,6 @@ export default function TodoList() {
   } else {
     todosToBeRendered = todos;
   }
-
-  const todoJsx = todosToBeRendered.map((t) => {
-    return <Todo key={t.id} todo={t} />;
-  });
 
   function changeDisplayedType(e) {
     setDisplayedTodosType(e.target.value);
@@ -73,108 +82,214 @@ export default function TodoList() {
     setTodos(updatedTodos);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setTitleInput("");
+    showHideToast("Added successfully");
   }
+
+  // EVENT DELETE HANDLERS
+  function openDeleteDialog(todo) {
+    setDailogTodo(todo);
+    setShowDeleteDialog(true);
+  }
+
+  function handleDeleteDialogClose() {
+    setShowDeleteDialog(false);
+  }
+
+  function handleDeleteConfirm() {
+    const updatedTodos = todos.filter((t) => {
+      return t.id != dialogTodo.id;
+    });
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    setShowDeleteDialog(false);
+    showHideToast("Deleted successfully");
+  }
+  // ===EVENT DELETE HANDLERS
+
+  // EVENT UPDATE HANDLERS
+  function openUpdateDialog(todo) {
+    setDailogTodo(todo);
+    setShowUpdateDialog(true);
+  }
+
+  function handleUpdateClose() {
+    setShowUpdateDialog(false);
+  }
+
+  function handleUpdateConfirm() {
+    const updatedTodos = todos.map((t) => {
+      if (t.id == dialogTodo.id) {
+        return { ...t, title: dialogTodo.title, details: dialogTodo.details };
+      } else {
+        return t;
+      }
+    });
+    setTodos(updatedTodos);
+    setShowUpdateDialog(false);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    showHideToast("Updated successfully");
+  }
+  // ===EVENT UPDATE HANDLERS
+
+  const todoJsx = todosToBeRendered.map((t) => {
+    return (
+      <Todo
+        key={t.id}
+        todo={t}
+        showDelete={openDeleteDialog}
+        showUpdate={openUpdateDialog}
+      />
+    );
+  });
+
   return (
-    <Container maxWidth="sm">
-      <Card
-        sx={{ minWidth: 275 }}
-        style={{
-          maxHeight: "80vh",
-          overflow: "scroll",
-        }}
+    <>
+      {/* DELETE DIALOG */}
+      <Dialog
+        style={{ direction: "ltr" }}
+        onClose={handleDeleteDialogClose}
+        open={showDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        <CardContent>
-          <Typography variant="h2" style={{ fontWeight: "bold" }}>
-            مهامي
-          </Typography>
-          <Divider />
+        <DialogTitle id="alert-dialog-title">
+          Are you sure you want to delete?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You cannot undo the deletion after it is complete{" "}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteDialogClose}>Close</Button>
+          <Button autoFocus onClick={handleDeleteConfirm}>
+            Yes, delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* === DELETE DIALOG === */}
 
-          {/* {Filter Button} */}
-          <ToggleButtonGroup
-            style={{ direction: "ltr", marginTop: "30px" }}
-            value={displayedTodosType}
-            exclusive
-            onChange={changeDisplayedType}
-            aria-label="text alignment"
-            color="primary"
-          >
-            <ToggleButton value="non-completed">غير المنجز</ToggleButton>
-            <ToggleButton value="completed">المنجز</ToggleButton>
-            <ToggleButton value="all">الكل</ToggleButton>
-          </ToggleButtonGroup>
-          {/* ===Filter Button=== */}
+      {/* UPDATE DIALOG */}
+      <Dialog
+        style={{ direction: "ltr" }}
+        onClose={handleUpdateClose}
+        open={showUpdateDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Modify a task</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Task title"
+            fullWidth
+            variant="standard"
+            value={dialogTodo?.title}
+            onChange={(e) => {
+              setDailogTodo({ ...dialogTodo, title: e.target.value });
+            }}
+          />
 
-          {/* All Todo */}
-          {todoJsx}
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="the details"
+            fullWidth
+            variant="standard"
+            value={dialogTodo?.details}
+            onChange={(e) => {
+              setDailogTodo({ ...dialogTodo, details: e.target.value });
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleUpdateClose}>Close</Button>
+          <Button autoFocus onClick={handleUpdateConfirm}>
+            to be sure
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* === UPDATE DIALOG */}
 
-          {/* ===All Todo */}
+      <Container maxWidth="sm">
+        <Card
+          sx={{ minWidth: 275 }}
+          style={{
+            maxHeight: "80vh",
+            overflow: "scroll",
+          }}
+        >
+          <CardContent>
+            <Typography variant="h2" style={{ fontWeight: "bold" }}>
+              Tasks
+            </Typography>
+            <Divider />
 
-          {/* INPUT + ADD BUTTON */}
-          <Grid container style={{ marginTop: "20px" }} spacing={0}>
-            <Grid
-              xs={8}
-              display="flex"
-              justifyContent="space-around"
-              alignItems="center"
+            {/* {Filter Button} */}
+            <ToggleButtonGroup
+              style={{ direction: "rtl", marginTop: "30px" }}
+              value={displayedTodosType}
+              exclusive
+              onChange={changeDisplayedType}
+              aria-label="text alignment"
+              color="primary"
             >
-              <TextField
-                style={{ width: "100%" }}
-                id="outlined-basic"
-                label="عنوان المهمة"
-                variant="outlined"
-                value={titleInput}
-                onChange={(e) => {
-                  setTitleInput(e.target.value);
-                }}
-              />
-            </Grid>
+              <ToggleButton value="non-completed">non-completed</ToggleButton>
+              <ToggleButton value="completed">completed</ToggleButton>
+              <ToggleButton value="all">all</ToggleButton>
+            </ToggleButtonGroup>
+            {/* ===Filter Button=== */}
 
-            <Grid
-              xs={4}
-              display="flex"
-              justifyContent="space-around"
-              alignItems="center"
-            >
-              <Button
-                style={{ width: "100%", height: "100%" }}
-                variant="contained"
-                onClick={() => {
-                  handleAddClick();
-                }}
-                disabled={titleInput.length == 0}
+            {/* All Todo */}
+            {todoJsx}
+
+            {/* ===All Todo */}
+
+            {/* INPUT + ADD BUTTON */}
+            <Grid container style={{ marginTop: "20px" }} spacing={0}>
+              <Grid
+                xs={8}
+                display="flex"
+                justifyContent="space-around"
+                alignItems="center"
               >
-                إضافة
-              </Button>
+                <TextField
+                  style={{ width: "100%" }}
+                  id="outlined-basic"
+                  label="Task title"
+                  variant="outlined"
+                  value={titleInput}
+                  onChange={(e) => {
+                    setTitleInput(e.target.value);
+                  }}
+                />
+              </Grid>
+
+              <Grid
+                xs={4}
+                display="flex"
+                justifyContent="space-around"
+                alignItems="center"
+              >
+                <Button
+                  style={{ width: "100%", height: "100%" }}
+                  variant="contained"
+                  onClick={() => {
+                    handleAddClick();
+                  }}
+                  disabled={titleInput.length == 0}
+                >
+                  addition
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-          {/*== INPUT + ADD BUTTON == */}
-        </CardContent>
-      </Card>
-    </Container>
+            {/*== INPUT + ADD BUTTON == */}
+          </CardContent>
+        </Card>
+      </Container>
+    </>
   );
 }
-
-/* <Grid container spacing={0} style={{ marginTop: "20px" }}>
-<Grid
-  xs={8}
-  display="flex"
-  justifyContent="space-around"
-  alignItems="center"
->
-  <TextField
-    style={{ width: "100%" }}
-    id="outlined-basic"
-    label="عنوان المهمة"
-    variant="outlined"
-  />
-</Grid>
-<Grid
-  xs={4}
-  display="flex"
-  justifyContent="space-around"
-  alignItems="center"
-  style={{ background: "orange" }}
->
-  sssssss
-</Grid>
-</Grid> */

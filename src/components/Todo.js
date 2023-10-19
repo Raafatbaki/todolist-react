@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { useContext, useState } from "react";
 import { TodosContext } from "../contexts/todosContext";
+import { TosatContext } from "../contexts/Toastcontext";
 import TextField from "@mui/material/TextField";
 
 //Icon
@@ -12,22 +13,10 @@ import CheckIcon from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-//Dialog
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 
-export default function Todo({ todo, handleCheck }) {
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [showUpdateDialog, setShowUpdateDialog] = useState(false);
-  const [updatedTodo, setUpdatedTodo] = useState({
-    title: todo.title,
-    details: todo.details,
-  });
-
+export default function Todo({ todo, showDelete, showUpdate }) {
   const { todos, setTodos } = useContext(TodosContext);
+  const { showHideToast } = useContext(TosatContext);
 
   // EVENT HANDLERS
   function handleCheckClick() {
@@ -39,117 +28,20 @@ export default function Todo({ todo, handleCheck }) {
     });
     setTodos(updatedTodos);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    showHideToast("Modified successfully");
   }
 
   function handleDeleteClick() {
-    setShowDeleteDialog(true);
-  }
-
-  function handleDeleteDialogClose() {
-    setShowDeleteDialog(false);
-  }
-
-  function handleDeleteConfirm() {
-    const updatedTodos = todos.filter((t) => {
-      return t.id != todo.id;
-    });
-    setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    showDelete(todo);
   }
 
   function handleUpdateClick() {
-    setShowUpdateDialog(true);
+    showUpdate(todo);
   }
 
-  function handleUpdateClose() {
-    setShowUpdateDialog(false);
-  }
-
-  function handleUpdateConfirm() {
-    const updatedTodos = todos.map((t) => {
-      if (t.id == todo.id) {
-        return { ...t, title: updatedTodo.title, details: updatedTodo.details };
-      } else {
-        return t;
-      }
-    });
-    setTodos(updatedTodos);
-    setShowUpdateDialog(false);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
-  }
   // ====== EVENT HANDLERS ======
   return (
     <>
-      {/* DELETE DIALOG */}
-      <Dialog
-        style={{ direction: "rtl" }}
-        onClose={handleDeleteDialogClose}
-        open={showDeleteDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          هل انت متاكد من رغبتك في الحذف
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            لا يمكنك التراجع عن الحذف بعد اتمامه
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteDialogClose}>اغلاق</Button>
-          <Button autoFocus onClick={handleDeleteConfirm}>
-            نعم قم بالحذف
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* === DELETE DIALOG === */}
-
-      {/* UPDATE DIALOG */}
-      <Dialog
-        style={{ direction: "rtl" }}
-        onClose={handleUpdateClose}
-        open={showUpdateDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">تعديل مهمة</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="عنوان المهمة"
-            fullWidth
-            variant="standard"
-            value={updatedTodo.title}
-            onChange={(e) => {
-              setUpdatedTodo({ ...updatedTodo, title: e.target.value });
-            }}
-          />
-
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="التفاصيل"
-            fullWidth
-            variant="standard"
-            value={updatedTodo.details}
-            onChange={(e) => {
-              setUpdatedTodo({ ...updatedTodo, details: e.target.value });
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleUpdateClose}>إغلاق</Button>
-          <Button autoFocus onClick={handleUpdateConfirm}>
-            تأكيد
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* === UPDATE DIALOG */}
-
       <Card
         className="todoCard"
         sx={{
@@ -165,13 +57,13 @@ export default function Todo({ todo, handleCheck }) {
               <Typography
                 variant="h5"
                 sx={{
-                  textAlign: "right",
+                  textAlign: "left",
                   textDecoration: todo.isCompleted ? "line-through" : "none",
                 }}
               >
                 {todo.title}
               </Typography>
-              <Typography variant="h6" sx={{ textAlign: "right" }}>
+              <Typography variant="h6" sx={{ textAlign: "left" }}>
                 {todo.details}
               </Typography>
             </Grid>
@@ -199,7 +91,7 @@ export default function Todo({ todo, handleCheck }) {
               </IconButton>
               {/*== CHECK ICON BUTTON ==*/}
 
-              {/* CHECK ICON BUTTON */}
+              {/* UPDATE ICON BUTTON */}
               <IconButton
                 className="iconButton"
                 aria-label="delete"
@@ -212,7 +104,7 @@ export default function Todo({ todo, handleCheck }) {
               >
                 <ModeEditOutlinedIcon />
               </IconButton>
-              {/*== CHECK ICON BUTTON ==*/}
+              {/*== UPDATE ICON BUTTON ==*/}
 
               {/* DELETE BUTTON */}
               <IconButton
