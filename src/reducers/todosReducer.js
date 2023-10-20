@@ -13,13 +13,35 @@ export default function reducer(currentTodos, action) {
       localStorage.setItem("todos", JSON.stringify(updatedTodos));
       return updatedTodos;
     }
-    
+
     case "deleted": {
-			const updatedTodos = currentTodos.filter((t) => {
-				return t.id != action.payload.id;
-			});
-			localStorage.setItem("todos", JSON.stringify(updatedTodos));
-			return updatedTodos;
+      const updatedTodos = currentTodos.filter((t) => {
+        return t.id != action.payload.id;
+      });
+      localStorage.setItem("todos", JSON.stringify(updatedTodos));
+      return updatedTodos;
+    }
+
+    case "updated": {
+      const updatedTodos = currentTodos.map((t) => {
+        if (t.id == action.payload.id) {
+          return {
+            ...t,
+            title: action.payload.title,
+            details: action.payload.details,
+          };
+        } else {
+          return t;
+        }
+      });
+      localStorage.setItem("todos", JSON.stringify(updatedTodos));
+      return updatedTodos;
+    }
+
+    case "get": {
+			const storageTodos =
+				JSON.parse(localStorage.getItem("todos")) ?? [];
+			return storageTodos;
 		}
 
     default: {

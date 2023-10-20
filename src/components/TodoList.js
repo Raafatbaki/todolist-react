@@ -29,7 +29,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 export default function TodoList() {
   // console.log("re render")
-  const { todos2, setTodos } = useContext(TodosContext);
   const [ todos, dispatch ] = useReducer(todosReducer, []);
 
   const { showHideToast } = useToast();
@@ -70,8 +69,7 @@ export default function TodoList() {
   }
 
   useEffect(() => {
-    const storageTodos = JSON.parse(localStorage.getItem("todos")) ?? [];
-    setTodos(storageTodos);
+    dispatch({ type: "get" });
   }, []);
 
   function handleAddClick() {
@@ -108,16 +106,8 @@ export default function TodoList() {
   }
 
   function handleUpdateConfirm() {
-    const updatedTodos = todos.map((t) => {
-      if (t.id == dialogTodo.id) {
-        return { ...t, title: dialogTodo.title, details: dialogTodo.details };
-      } else {
-        return t;
-      }
-    });
-    setTodos(updatedTodos);
+    dispatch({ type: "updated", payload: dialogTodo });
     setShowUpdateDialog(false);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
     showHideToast("Updated successfully");
   }
   // ===EVENT UPDATE HANDLERS
