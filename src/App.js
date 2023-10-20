@@ -5,7 +5,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import TodosProvider, { TodosContext } from "./contexts/todosContext";
-import MySnackBar from "./components/MySnackBar";
 import { ToastPrevoider } from "./contexts/Toastcontext";
 
 const itodos = [

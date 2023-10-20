@@ -9,7 +9,6 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { v4 as uuidv4 } from "uuid";
 
 // Components
 import Todo from "./Todo";
@@ -17,8 +16,7 @@ import Todo from "./Todo";
 // OTHERS
 import { useTodos, useTodosDispatch } from "../contexts/todosContext";
 import { useToast } from "../contexts/Toastcontext";
-import { useContext, useState, useEffect, useMemo, useReducer } from "react";
-import todosReducer from "../reducers/todosReducer";
+import { useState, useEffect, useMemo } from "react";
 
 //Dialog
 import Dialog from "@mui/material/Dialog";
@@ -30,8 +28,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 export default function TodoList() {
   // console.log("re render")
   const todos = useTodos();
-	const dispatch = useTodosDispatch();
-  
+  const dispatch = useTodosDispatch();
+
   const { showHideToast } = useToast();
 
   const [dialogTodo, setDailogTodo] = useState(null);

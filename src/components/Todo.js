@@ -1,12 +1,10 @@
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import { useContext, useState } from "react";
-import { useTodos, useTodosDispatch } from "../contexts/todosContext";
+
+import { useTodosDispatch } from "../contexts/todosContext";
 import { useToast } from "../contexts/Toastcontext";
-import TextField from "@mui/material/TextField";
 
 //Icon
 import CheckIcon from "@mui/icons-material/Check";
@@ -15,9 +13,8 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 export default function Todo({ todo, showDelete, showUpdate }) {
-  const todos = useTodos();
-	const dispatch = useTodosDispatch();
-  
+  const dispatch = useTodosDispatch();
+
   const { showHideToast } = useToast();
 
   // EVENT HANDLERS
