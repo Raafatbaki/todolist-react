@@ -17,7 +17,8 @@ import Todo from "./Todo";
 // OTHERS
 import { TodosContext } from "../contexts/todosContext";
 import { useToast } from "../contexts/Toastcontext";
-import { useContext, useState, useEffect, useMemo } from "react";
+import { useContext, useState, useEffect, useMemo, useReducer } from "react";
+import todosReducer from "../reducers/todosReducer";
 
 //Dialog
 import Dialog from "@mui/material/Dialog";
@@ -28,7 +29,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 export default function TodoList() {
   // console.log("re render")
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos2, setTodos } = useContext(TodosContext);
+  const [ todos, dispatch ] = useReducer(todosReducer, []);
+
   const { showHideToast } = useToast();
 
   const [dialogTodo, setDailogTodo] = useState(null);
@@ -39,14 +42,14 @@ export default function TodoList() {
 
   // filteration arrays
   const completedTodos = useMemo(() => {
-    // console.log("complated")
+    // console.log("completed")
     return todos.filter((t) => {
       return t.isCompleted;
     });
   }, [todos]);
 
   const notCompletedTodos = useMemo(() => {
-    // console.log("not complated")
+    // console.log("not completed")
     return todos.filter((t) => {
       return !t.isCompleted;
     });
@@ -72,15 +75,7 @@ export default function TodoList() {
   }, []);
 
   function handleAddClick() {
-    const newTodo = {
-      id: uuidv4(),
-      title: titleInput,
-      details: "",
-      isCompleted: false,
-    };
-    const updatedTodos = [...todos, newTodo];
-    setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    dispatch({ type: "added", payload: { newTitle: titleInput } });
     setTitleInput("");
     showHideToast("Added successfully");
   }
