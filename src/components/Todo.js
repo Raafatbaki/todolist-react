@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import { useContext, useState } from "react";
-import { TodosContext } from "../contexts/todosContext";
+import { useTodos, useTodosDispatch } from "../contexts/todosContext";
 import { useToast } from "../contexts/Toastcontext";
 import TextField from "@mui/material/TextField";
 
@@ -15,19 +15,14 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 export default function Todo({ todo, showDelete, showUpdate }) {
-  const { todos, setTodos } = useContext(TodosContext);
+  const todos = useTodos();
+	const dispatch = useTodosDispatch();
+  
   const { showHideToast } = useToast();
 
   // EVENT HANDLERS
   function handleCheckClick() {
-    const updatedTodos = todos.map((t) => {
-      if (t.id == todo.id) {
-        t.isCompleted = !t.isCompleted;
-      }
-      return t;
-    });
-    setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    dispatch({ type: "toggledCompleted", payload: todo });
     showHideToast("Modified successfully");
   }
 

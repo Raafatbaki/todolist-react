@@ -4,7 +4,7 @@ import TodoList from "./components/TodoList";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
-import { TodosContext } from "./contexts/todosContext";
+import TodosProvider, { TodosContext } from "./contexts/todosContext";
 import MySnackBar from "./components/MySnackBar";
 import { ToastPrevoider } from "./contexts/Toastcontext";
 
@@ -45,23 +45,23 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <ToastPrevoider>
-        <div
-          className="App"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-            background: "#191b1f",
-            direction: "ltr",
-          }}
-        >
-          <TodosContext.Provider value={{ todos, setTodos }}>
-            <TodoList />
-          </TodosContext.Provider>
-        </div>
-      </ToastPrevoider>
+      <TodosProvider>
+        <ToastPrevoider>
+          <div
+            className="App"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              background: "#191b1f",
+              direction: "ltr",
+            }}
+          >
+              <TodoList />
+          </div>
+        </ToastPrevoider>
+      </TodosProvider>
     </ThemeProvider>
   );
 }

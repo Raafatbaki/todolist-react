@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import Todo from "./Todo";
 
 // OTHERS
-import { TodosContext } from "../contexts/todosContext";
+import { useTodos, useTodosDispatch } from "../contexts/todosContext";
 import { useToast } from "../contexts/Toastcontext";
 import { useContext, useState, useEffect, useMemo, useReducer } from "react";
 import todosReducer from "../reducers/todosReducer";
@@ -29,8 +29,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 export default function TodoList() {
   // console.log("re render")
-  const [ todos, dispatch ] = useReducer(todosReducer, []);
-
+  const todos = useTodos();
+	const dispatch = useTodosDispatch();
+  
   const { showHideToast } = useToast();
 
   const [dialogTodo, setDailogTodo] = useState(null);

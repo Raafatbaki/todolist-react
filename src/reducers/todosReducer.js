@@ -39,10 +39,24 @@ export default function reducer(currentTodos, action) {
     }
 
     case "get": {
-			const storageTodos =
-				JSON.parse(localStorage.getItem("todos")) ?? [];
-			return storageTodos;
-		}
+      const storageTodos = JSON.parse(localStorage.getItem("todos")) ?? [];
+      return storageTodos;
+    }
+
+    case "toggledCompleted": {
+      const updatedTodos = currentTodos.map((t) => {
+        if (t.id == action.payload.id) {
+          const updatedTodo = {
+            ...t,
+            isCompleted: !t.isCompleted,
+          };
+          return updatedTodo;
+        }
+        return t;
+      });
+      localStorage.setItem("todos", JSON.stringify(updatedTodos));
+      return updatedTodos;
+    }
 
     default: {
       throw Error("Unknown Error", action.type);
