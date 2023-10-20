@@ -91,11 +91,7 @@ export default function TodoList() {
   }
 
   function handleDeleteConfirm() {
-    const updatedTodos = todos.filter((t) => {
-      return t.id != dialogTodo.id;
-    });
-    setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    dispatch({ type: "deleted", payload: dialogTodo });
     setShowDeleteDialog(false);
     showHideToast("Deleted successfully");
   }

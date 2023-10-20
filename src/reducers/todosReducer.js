@@ -9,13 +9,19 @@ export default function reducer(currentTodos, action) {
         details: "",
         isCompleted: false,
       };
-
       const updatedTodos = [...currentTodos, newTodo];
-
       localStorage.setItem("todos", JSON.stringify(updatedTodos));
-
       return updatedTodos;
     }
+    
+    case "deleted": {
+			const updatedTodos = currentTodos.filter((t) => {
+				return t.id != action.payload.id;
+			});
+			localStorage.setItem("todos", JSON.stringify(updatedTodos));
+			return updatedTodos;
+		}
+
     default: {
       throw Error("Unknown Error", action.type);
     }
